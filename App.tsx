@@ -1,8 +1,9 @@
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { GlobalStateProvider, GlobalStateContext } from './context/GlobalStateContext';
+import { GlobalStateProvider } from './context/GlobalStateContext';
+import { useAuth } from './hooks/useAuth';
 
 import AuthPage from './pages/AuthPage';
 import Layout from './components/Layout';
@@ -15,9 +16,7 @@ import WebsiteSettingsPage from './pages/admin/WebsiteSettingsPage';
 
 // Wrapper to protect routes that require authentication
 const ProtectedRoute: React.FC<{ children: React.ReactElement; adminOnly?: boolean }> = ({ children, adminOnly = false }) => {
-  const context = useContext(GlobalStateContext);
-  if (!context) return null;
-  const { isAuthenticated, currentUser } = context;
+  const { isAuthenticated, currentUser } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -28,9 +27,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement; adminOnly?: boole
   return children;
 };
 
-const AppContent: React.FC = () => {
-    const context = useContext(GlobalStateContext);
-    const isAuthenticated = context?.isAuthenticated || false;
+const AppRoutes: React.FC = () => {
+    const { isAuthenticated } = useAuth();
 
     return (
         <HashRouter>
@@ -69,7 +67,7 @@ const App: React.FC = () => {
                 },
             }}
         />
-        <AppContent />
+        <AppRoutes />
     </GlobalStateProvider>
   );
 };
