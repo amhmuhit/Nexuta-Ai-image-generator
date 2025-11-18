@@ -1,4 +1,3 @@
-
 import React, { useState, ChangeEvent } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { AppSettings, CreditPackage } from '../../types';
@@ -42,7 +41,7 @@ const WebsiteSettingsPage: React.FC = () => {
         setLocalSettings(prev => ({
             ...prev,
             creditPackages: prev.creditPackages.map(pkg => 
-                pkg.id === id ? { ...pkg, [field]: value } : pkg
+                pkg.id === id ? { ...pkg, [field]: value } as CreditPackage : pkg
             )
         }));
     };
