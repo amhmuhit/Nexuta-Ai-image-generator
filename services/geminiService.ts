@@ -1,12 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { GenerateImageResponse } from "@google/genai";
+import { GenerationConfig } from "../types";
 
-
-export interface GenerationConfig {
-    prompt: string;
-    aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4';
-    numberOfImages: number;
-}
 
 /**
  * Generates an image using the Gemini API (imagen-4.0-generate-001 model).

@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { generateImage, GenerationConfig } from '../../services/geminiService';
 import { useAuth } from '../../hooks/useAuth';
-import { GeneratedImage } from '../../types';
+import { GeneratedImage, GenerationConfig } from '../../types';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
@@ -37,6 +36,9 @@ const ImageGeneratorPage: React.FC = () => {
 
         setIsLoading(true);
         try {
+            // CRITICAL FIX: Dynamically import the service to prevent 'process' error on load
+            const { generateImage } = await import('../../services/geminiService');
+            
             const config: GenerationConfig = {
                 prompt,
                 aspectRatio,
