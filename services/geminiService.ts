@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import type { GenerateImageResponse } from "@google/genai";
 
@@ -15,14 +14,7 @@ export interface GenerationConfig {
  * @returns A promise that resolves to the base64 encoded string of the generated image.
  */
 export const generateImage = async (config: GenerationConfig): Promise<string> => {
-    // This check is for the browser environment where process.env is not directly available.
-    // The build tool should replace process.env.API_KEY with the actual key.
-    // In a real-world scenario, this key would be handled securely.
-    if (!process.env.API_KEY) {
-        console.error("API_KEY environment variable not set.");
-        throw new Error("API key is not configured.");
-    }
-    
+    // Initialize the client. The API key is automatically picked up from the environment.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     try {
@@ -45,6 +37,9 @@ export const generateImage = async (config: GenerationConfig): Promise<string> =
     } catch (error) {
         console.error("Error generating image with Gemini API:", error);
         // You might want to handle specific error types from the API here
+        if (error instanceof Error) {
+            throw new Error(`Failed to generate image: ${error.message}`);
+        }
         throw new Error("Failed to generate image. Please try again later.");
     }
 };
